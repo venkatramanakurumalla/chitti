@@ -2,7 +2,6 @@ import streamlit as st
 import threading
 import math
 import numpy as np
-import google.generativeai as genai
 from gtts import gTTS
 import pygame
 from sentence_transformers import SentenceTransformer
@@ -12,12 +11,20 @@ import logging
 import requests
 from bs4 import BeautifulSoup
 
+# Ensure google-generativeai is installed and imported correctly
+try:
+    import google.generativeai as genai
+    genai.configure(api_key="YOUR_API_KEY_HERE")
+    model = genai.GenerativeModel('gemini-1.5-flash')
+except ImportError as e:
+    st.error("google-generativeai module not found. Please install it using 'pip install google-generativeai'")
+    raise e
+except Exception as e:
+    st.error(f"An error occurred with google-generativeai: {e}")
+    raise e
+
 # Set up logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-
-# Set up the Gemini API key
-genai.configure(api_key="YOUR_API_KEY_HERE")
-model = genai.GenerativeModel('gemini-1.5-flash')
 
 # Initialize sentence transformer model for encoding
 try:
